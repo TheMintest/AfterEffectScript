@@ -8,7 +8,7 @@
             "type": "extendscript-debug",
             "request": "launch",
             "name": "Demander le nom du script",
-            "program": "${workspaceFolder}/myScript/${command:AskForScriptName}",
+            "program": "${workspaceFolder}/myScript/test duplicate comp.jsx",
             "stopOnEntry": false
         }
     ]
