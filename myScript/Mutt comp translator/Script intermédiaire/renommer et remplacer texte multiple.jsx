@@ -32,6 +32,8 @@ startButton.onClick = function() {
             renameLayer(selectedLayer, input);            
         } else {
             alert("no more text layer in the current comp");
+            break
         }
     }
+    alert("done");
 }
