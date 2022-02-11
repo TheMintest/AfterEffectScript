@@ -8,7 +8,7 @@
             "type": "extendscript-debug",
             "request": "launch",
             "name": "Demander le nom du script",
-            "program": "${workspaceFolder}/myScript/Mutt comp translator/script intermédiaire/renommer et remplacer texte.jsx",
+            "program": "${workspaceFolder}/myScript/Mutt comp translator/script intermédiaire/modifier depuis un csv.jsx",
             "stopOnEntry": false
         }
     ]
