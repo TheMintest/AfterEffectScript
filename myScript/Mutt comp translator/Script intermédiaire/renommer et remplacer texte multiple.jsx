@@ -26,8 +26,6 @@ startButton.onClick = function() {
         input = "texte replacé " + i;
 
         if (selectedLayer.property("Source Text")!=null){
-            alert("selected layer is a text layer");
-            // replaceText("Test multiple calque"+i);
             replaceText(selectedLayer, input);
             renameLayer(selectedLayer, input);            
         } else {
@@ -37,3 +35,4 @@ startButton.onClick = function() {
     }
     alert("done");
 }
+

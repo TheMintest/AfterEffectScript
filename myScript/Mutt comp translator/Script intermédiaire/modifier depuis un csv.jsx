@@ -1,9 +1,4 @@
 
-/*
-Code for Import https://scriptui.joonas.me — (Triple click to select): 
-{"activeId":2,"items":{"item-0":{"id":0,"type":"Dialog","parentId":false,"style":{"enabled":true,"varName":"mainWindow","windowType":"Palette","creationProps":{"su1PanelCoordinates":false,"maximizeButton":false,"minimizeButton":true,"independent":false,"closeButton":true,"borderless":false,"resizeable":true},"text":"MUTT's Auto CompTranslator","preferredSize":[0,0],"margins":16,"orientation":"column","spacing":10,"alignChildren":["center","top"]}},"item-1":{"id":1,"type":"Group","parentId":0,"style":{"enabled":true,"varName":"groupOne","preferredSize":[0,0],"margins":0,"orientation":"row","spacing":10,"alignChildren":["left","center"],"alignment":null}},"item-2":{"id":2,"type":"EditText","parentId":1,"style":{"enabled":true,"varName":"fileLocBox","creationProps":{"noecho":false,"readonly":false,"multiline":false,"scrollable":false,"borderless":false,"enterKeySignalsOnChange":false},"softWrap":false,"text":"Emplacement du fichier","justify":"left","preferredSize":[0,0],"alignment":null,"helpTip":null}},"item-3":{"id":3,"type":"Button","parentId":1,"style":{"enabled":true,"varName":"getFileButton","text":"Sélectionner l'emplacement du fichier CSV","justify":"center","preferredSize":[0,0],"alignment":null,"helpTip":null}},"item-4":{"id":4,"type":"Group","parentId":0,"style":{"enabled":true,"varName":"groupTwo","preferredSize":[0,0],"margins":0,"orientation":"row","spacing":10,"alignChildren":["left","center"],"alignment":null}},"item-5":{"id":5,"type":"Button","parentId":4,"style":{"enabled":true,"varName":"applyButton","text":"C'est parti !","justify":"center","preferredSize":[0,0],"alignment":null,"helpTip":null}}},"order":[0,1,2,3,4,5],"settings":{"importJSON":true,"indentSize":false,"cepExport":false,"includeCSSJS":true,"showDialog":true,"functionWrapper":false,"afterEffectsDockable":false,"itemReferenceList":"None"}}
-*/ 
-
 // MAINWINDOW
 // ==========
 var mainWindow = new Window("palette", undefined, undefined, {minimizeButton: true, resizeable: true}); 
@@ -27,13 +22,75 @@ var getFileButton = groupOne.add("button", undefined, undefined, {name: "getFile
 // GROUPTWO
 // ========
 var groupTwo = mainWindow.add("group", undefined, {name: "groupTwo"}); 
-    groupTwo.orientation = "row"; 
-    groupTwo.alignChildren = ["left","center"]; 
-    groupTwo.spacing = 10; 
-    groupTwo.margins = 0; 
-
 var applyButton = groupTwo.add("button", undefined, undefined, {name: "applyButton"}); 
     applyButton.text = "C'est parti !"; 
 
-mainWindow.show();
+//global variable
+var selectedFile = new File;
+var check = 0;
+var firstLanguage;
+var csvData = [];
+var comp = app.project.activeItem;
 
+
+
+//Script Start
+
+ mainWindow.show();
+
+ //selection du fichier
+getFileButton.onClick = function() {
+    selectedFile = selectedFile.openDlg("Please select a file", "Acceptable file : *.csv")
+    fileLocBox.text = selectedFile.fsName;
+    check = 1
+}
+
+//application 
+applyButton.onClick = function() {
+    
+    //Vérification qu'un fichier est selectionné
+    if(check ===0) {
+        alert("Please select a file");
+        return false;
+    } else {
+        alert("File selected is "+selectedFile.name);
+        readCSV(selectedFile);
+
+        breakInLine();
+
+        for (var i=1; i<comp.layers.length; i++) {
+            var selectedLayer = comp.layer(i);
+        alert("current selected layer is " + selectedLayer.name);
+        input = firstLanguage[i];
+        inputName = firstLanguage[0] + " "+ firstLanguage[i];
+
+            if (selectedLayer.property("Source Text")!=null){
+                replaceText(selectedLayer, input);
+                renameLayer(selectedLayer, inputName);
+            }
+        }  
+    }
+}
+
+
+function readCSV(selectedFile) {
+    selectedFile.open("r");
+    do {
+        csvData.push(selectedFile.readln());
+    } while(!selectedFile.eof);
+}
+
+function breakInLine(){
+    firstLanguage = csvData[1].split(",");
+    // alert("First language selected is "+ firstLanguage[0]);
+}
+
+function replaceText(selectedLayer, input) {
+    selectedLayer.property("Source Text").setValue(input);
+    alert("Replace text done");
+}
+
+function renameLayer(selectedLayer, input) {
+    selectedLayer.name = input;
+    alert("renameLayer done");
+}
