@@ -28,7 +28,7 @@ var applyButton = groupTwo.add("button", undefined, undefined, {name: "applyButt
 //global variable
 var selectedFile = new File;
 var check = 0;
-var firstLanguage;
+var currentLanguage;
 var csvData = [];
 var comp = app.project.activeItem;
 
@@ -47,6 +47,7 @@ getFileButton.onClick = function() {
 
 //application 
 applyButton.onClick = function() {
+    app.beginUndoGroup("appliquer le script");
     
     //Vérification qu'un fichier est selectionné
     if(check ===0) {
@@ -54,22 +55,29 @@ applyButton.onClick = function() {
         return false;
     } else {
         alert("File selected is "+selectedFile.name);
+
+        //prend mon document CSV et le place dans la variable csvData.
         readCSV(selectedFile);
+        for(var l=1; l<=csvData.length;l++){
 
-        breakInLine();
+            getCurrentLanguage(l);
 
-        for (var i=1; i<comp.layers.length; i++) {
-            var selectedLayer = comp.layer(i);
-        alert("current selected layer is " + selectedLayer.name);
-        input = firstLanguage[i];
-        inputName = firstLanguage[0] + " "+ firstLanguage[i];
+            for (var i=1; i<comp.layers.length; i++) {
+                var selectedLayer = comp.layer(i);
+            // alert("current selected layer is " + selectedLayer.name);
+            input = currentLanguage[i];
+            inputName = currentLanguage[0] + " "+ currentLanguage[i];
 
-            if (selectedLayer.property("Source Text")!=null){
-                replaceText(selectedLayer, input);
-                renameLayer(selectedLayer, inputName);
+                if (selectedLayer.property("Source Text")!=null){
+                    replaceText(selectedLayer, input);
+                    renameLayer(selectedLayer, inputName);
+                }
             }
-        }  
+            alert("end of loop " + currentLanguage[0]);
+  
+        }
     }
+    app.endUndoGroup();
 }
 
 
@@ -78,19 +86,17 @@ function readCSV(selectedFile) {
     do {
         csvData.push(selectedFile.readln());
     } while(!selectedFile.eof);
+    // alert("CSV lenght is" + csvData.length)
 }
 
-function breakInLine(){
-    firstLanguage = csvData[1].split(",");
-    // alert("First language selected is "+ firstLanguage[0]);
-}
+function getCurrentLanguage(lineNumber){ currentLanguage = csvData[lineNumber].split(",");}
 
 function replaceText(selectedLayer, input) {
     selectedLayer.property("Source Text").setValue(input);
-    alert("Replace text done");
+    // alert("Replace text done");
 }
 
 function renameLayer(selectedLayer, input) {
     selectedLayer.name = input;
-    alert("renameLayer done");
+    // alert("renameLayer done");
 }
