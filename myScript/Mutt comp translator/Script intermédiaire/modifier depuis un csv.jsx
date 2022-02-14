@@ -31,6 +31,7 @@ var check = 0;
 var currentLanguage;
 var csvData = [];
 var comp = app.project.activeItem;
+var TextNumberLine;
 
 
 
@@ -58,6 +59,9 @@ applyButton.onClick = function() {
 
         //prend mon document CSV et le place dans la variable csvData.
         readCSV(selectedFile);
+        TextNumberLine = csvData[0].split(",");
+        var currentText=1;
+
         for(var l=1; l<=csvData.length;l++){
 
             getCurrentLanguage(l);
