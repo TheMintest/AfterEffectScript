@@ -69,12 +69,13 @@ applyButton.onClick = function() {
             for (var i=1; i<comp.layers.length; i++) {
                 var selectedLayer = comp.layer(i);
             // alert("current selected layer is " + selectedLayer.name);
-            input = currentLanguage[i];
-            inputName = currentLanguage[0] + " "+ currentLanguage[i];
+            input = currentLanguage[currentText];
+            inputName = currentLanguage[0] + " "+ currentLanguage[currentText];
 
-                if (selectedLayer.property("Source Text")!=null){
+                if (selectedLayer instanceof TextLayer){
                     replaceText(selectedLayer, input);
                     renameLayer(selectedLayer, inputName);
+                    currentText += 1;
                 }
             }
             alert("end of loop " + currentLanguage[0]);
