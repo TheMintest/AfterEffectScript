@@ -1,7 +1,5 @@
 // MAINWINDOW
 
-const { instanceOf } = require("prop-types");
-
 // ==========
 var mainWindow = new Window("palette", undefined, undefined, {minimizeButton: true, resizeable: true}); 
     mainWindow.text = "MUTT's Auto CompTranslator"; 
@@ -30,12 +28,15 @@ var applyButton = groupTwo.add("button", undefined, undefined, {name: "applyButt
 //global variable
 var selectedFile = new File;
 var check = 0;
-var currentLanguage;
+var currentLanguageName;
 var csvData = [];
 var comp = app.project.activeItem;
 var textNumberLine; 
 var selectedLayer;
-var numberOfComp;
+var numberOfLanguage;
+var dossierFr = findItemByName("Français");
+var numberOfComp = dossierFr.numItems;
+
 
 
 //Script Start
@@ -52,34 +53,64 @@ getFileButton.onClick = function() {
 //début du script
 app.beginUndoGroup("appliquer le script");
 
-applyButton.onClick = function {
+applyButton.onClick = function() {
     if(check === 0) {
         alert("Please select a file");
     } else {
-        getNumberOfComp();
         readCSV();
-        selectComp();
-        duplicateComp();
-        renameComp();
-        getNumberOfTextLayer();
-        selectCurrentLayer();
-        if (selectedLayer instanceof TextLayer){
-            renameTextLayer();
-            modifyTextContent();
+
+        numberOfLanguage = csvData.length-1;
+
+        // inserer boucle du nombre de language
+        for (var currentLanguage =2; currentLanguage <= numberOfLanguage; currentLanguage++) {
+
+            //créer un array qui contient tout nos texte
+            var currentLineArray = csvData[currentLanguage].split(",");
+
+            // Crée un dossier nommé comme la langue de la ligne actuelle et le stock dans une variable
+            var currentLanguageFolder = app.project.items.addFolder(currentLineArray[0]);
+
+
+            for(var frComp = 1; frComp<= dossierFr.numItems; frComp++) {
+                dossierFr.item(frComp).parentFolder = currentLanguageFolder;
+            }
+
+            // for (var currentComp = 1; currentComp<=dossierFr.items.lenght)
+            
+            // selectComp();
+            // duplicateComp();
+            // renameComp();
+            // getNumberOfTextLayer();
+            // selectCurrentLayer();
+            // if (selectedLayer instanceof TextLayer){
+            //     renameTextLayer();
+            //     modifyTextContent();
+            // }
         }
 
     }
 
 }
 
-app.endUndoGroup;
+app.endUndoGroup();
 
-function getNumberOfComp{
-    app.project
 
+
+function readCSV() {
+    selectedFile.open("r");
+    do {
+
+        csvData.push(selectedFile.readln());
+    } while(!selectedFile.eof);
+    // alert("CSV lenght is" + csvData.length)
 }
 
-function readCSV {
+function findItemByName(myName) {
+    var thisItemSet = app.project.items;
 
+    for (var thisItemIterator = 1; thisItemIterator < thisItemSet.length; thisItemIterator++) {
+        if (thisItemSet[thisItemIterator].name === myName) {
+            return thisItemSet[thisItemIterator];
+        }
+    }
 }
-
