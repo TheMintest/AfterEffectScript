@@ -1,15 +1,11 @@
-// Find a project item by name
 
-function findItemByName(myName) {
-    var thisItemSet = app.project.items;
+#include '/Users/guillaumedharcourt/node_modules/aequery/dist/aequery.js' // aequery is now available as aeq
+// Disable all Camera lens blur effects in active comp
+aeq( 'activecomp effect[matchName="ADBE Camera Lens Blur"]' ).attr( 'enabled', false );
 
-    for (var thisItemIterator = 1; thisItemIterator < thisItemSet.length; thisItemIterator++) {
-        if (thisItemSet[thisItemIterator].name === myName) {
-            return thisItemSet[thisItemIterator];
-        }
-    }
+function alertFolderName(folderName) {
+    alert(aeq.project.getFolder(folderName).name)
 }
 
-var dossierFr = findItemByName("Français");
 
-alert(dossierFr.items.length);
+alertFolderName('Français');

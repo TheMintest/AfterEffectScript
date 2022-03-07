@@ -1,3 +1,10 @@
+const aeq = require("aequery");
+
+//dépendance : 
+#include '/Users/guillaumedharcourt/node_modules/aequery/dist/aequery.js' // aequery is now available as aeq
+// Disable all Camera lens blur effects in active comp
+aeq( 'activecomp effect[matchName="ADBE Camera Lens Blur"]' ).attr( 'enabled', false );
+
 // MAINWINDOW
 
 // ==========
@@ -106,11 +113,5 @@ function readCSV() {
 }
 
 function findItemByName(myName) {
-    var thisItemSet = app.project.items;
-
-    for (var thisItemIterator = 1; thisItemIterator < thisItemSet.length; thisItemIterator++) {
-        if (thisItemSet[thisItemIterator].name === myName) {
-            return thisItemSet[thisItemIterator];
-        }
-    }
+    aeq.project.get
 }
